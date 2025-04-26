@@ -1,0 +1,21 @@
+{
+  "name": "deploy-service",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf ./dist && tsc -b",
+    "dev": "npm run build && node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@types/node": "^22.14.1",
+    "ioredis": "^5.6.1",
+    "minio": "^8.0.5"
+  }
+}
