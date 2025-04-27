@@ -101,6 +101,8 @@ function getObjectsPath(basepath, fullpath) {
     for (const file of files) {
         if (file === '.git')
             continue;
+        if (file === 'cache')
+            continue;
         const fullPath = path_1.default.join(fullpath, file);
         if (!fs_1.default.existsSync(fullPath))
             continue;
@@ -120,7 +122,7 @@ function uploadBuildsToBucket(key) {
         console.log(objects.length);
         for (const obj of objects) {
             console.log(obj);
-            const uploadInfo = yield minioClient.fPutObject('builds', path_1.default.join(key, obj.relpath), obj.filepath);
+            const uploadInfo = yield minioClient.fPutObject('builds', path_1.default.join(key, '.next', obj.relpath), obj.filepath);
             console.log(uploadInfo);
         }
         sub.rpush('deploy-queue', key);

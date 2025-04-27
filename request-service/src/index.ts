@@ -74,8 +74,33 @@ function getDynamicPort() {
     
 }
 
+const public_urls :  Map<String, String> = new Map();
+const buildPath = path.join(__dirname, 'UwBOY')
+if(fs.existsSync(buildPath)) { 
+    const port = getDynamicPort();
+    let public_url; 
+    if(public_urls.has('UwBOY')) { 
+        public_url = public_urls.get('UwBOY')
+    } else { 
+        public_url = `http://localhost:${port}`
+    }
+    const worker = new Worker(path.resolve(path.join(__dirname, 'pull-builds-worker.js')), { workerData: 
+        { key: 'UwBOY', port, public_url}})
+    console.log(worker)
+    worker.on('message' , (data) => console.log(data))
+    worker.on('error', (err ) => console.log(err))
+    worker.on('exit', () => console.log('exited worker thread'))
+}
 emitter.on('downloads', (key) => { 
-    const worker = new Worker(path.resolve(path.join(__dirname, 'pull-builds-worker.js')), { workerData: { key, port: getDynamicPort()}})
+    const port = getDynamicPort();
+    let public_url; 
+    if(public_urls.has(key)) { 
+        public_url = public_urls.get(key)
+    } else { 
+        public_url = `http://localhost:${port}`
+    }
+    const worker = new Worker(path.resolve(path.join(__dirname, 'pull-builds-worker.js')), { workerData: 
+        { key, port, public_url}})
     console.log(worker)
     worker.on('message' , (data) => console.log(data))
     worker.on('error', (err ) => console.log(err))

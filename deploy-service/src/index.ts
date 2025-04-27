@@ -73,7 +73,7 @@ function getObjectsPath(basepath: string, fullpath: string) {
     const fileString : {filepath: string, relpath: string}[] = []
     for (const file of files) { 
         if(file === '.git') continue
-        
+        if(file === 'cache') continue
         const fullPath = path.join(fullpath, file)
         if(!fs.existsSync(fullPath)) continue
         if(fs.statSync(fullPath).isDirectory()) { 
@@ -90,7 +90,7 @@ async function uploadBuildsToBucket(key: string) {
     console.log(objects.length)
     for(const obj of objects) {
         console.log(obj) 
-        const uploadInfo = await minioClient.fPutObject('builds', path.join(key, obj.relpath), obj.filepath)
+        const uploadInfo = await minioClient.fPutObject('builds', path.join(key, '.next', obj.relpath), obj.filepath)
         console.log(uploadInfo)
              
     }
